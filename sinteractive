@@ -38,13 +38,13 @@ while true;do
     sleep 1s
 
     # Check job status
-    STATUS=$(squeue -j $JOB -t PD,R -h -o %t)
+    STATUS=$(squeue -j $JOB -t all -h -o %t)
 
     if [ "$STATUS" = "R" ];then
 	# Job is running, break the while loop
 	break
-    elif [ "$STATUS" != "PD" ];then
-	echo "Job is not Running or Pending. Aborting"
+    elif [[ "$STATUS" != "PD" &&  "$STATUS" != "CF" ]];then
+	echo "Job is not Running or Pending ($STATUS). Aborting"
 	scancel $JOB
 	exit 1
     fi
